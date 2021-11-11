@@ -8,7 +8,7 @@
 
 
 ## plotting scripts and getting resolution/repsonse
-"pionResolution.C" : command to run , root -b 'pionResolution.C(root_filename)'
+"pionResolution.C" : command to run , root -b 'pionResolution.C("root_histogram_filename")'
 get the one d distributions and resolution/response and output root file contains
 
 "DataOverlay.C" : command to run ,   root -b 'DataOverlay.C(rootfile)'
