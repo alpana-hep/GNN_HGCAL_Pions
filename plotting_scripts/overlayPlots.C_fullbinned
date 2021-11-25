@@ -1,0 +1,162 @@
+#include <stdio.h>
+#include<fstream>
+#include <vector>
+#include <string>
+#include <map>
+#include<iostream>
+using namespace std;
+double calculateError(float x, float y, float ex, float ey,float cov )
+{
+  return (x/y)*(sqrt(((ex/x)*(ex/x))+((ey/y)*(ey/y))-(2*cov/x*y)));
+    }
+void overlayPlots(string filename)
+{
+  char* hname = new char[200];
+ char* hist_name  = new char[200];
+  char* hist_name1 = new char[200];
+  char* hist_name2 = new char[200];
+char* full_path = new char[2000];
+  char* full_path1 = new char[2000];
+  char* full_path2 = new char[2000];
+  char* path2 = new char[2000];
+  char* title= new char[2000];
+char* title1= new char[2000];char* title2= new char[2000];
+  char* full_path3 = new char[2000];
+  char* full_path4 = new char[2000];
+  char* full_path5 = new char[2000];
+  char* full_path6 = new char[2000];
+  char* full_path7 = new char[2000];
+  char* full_path8 = new char[2000];
+  char* full_path9 = new char[2000];
+  char* full_path10 = new char[2000];
+  char* full_path11= new char[2000];
+  sprintf(hname,"%s",filename.c_str());
+  sprintf(path2,"Results/Full_Binned/OverlayPlots",filename.c_str());
+  TFile * inputfile = new TFile(hname,"READ");
+  char* reso_name=new char[1000];
+  char* resp_name=new char[1000];
+  char* name=new char[1000];
+  char* name1=new char[1000];
+  char* name2=new char[1000];
+
+
+const char *data[3] = { "Valid", "Train",
+                             "Tbdata" };
+// const char *Energy[8]={"20","50","80","100","120","200","250","300"};
+//int Elist[8]={20,50,80,100,120,200,250,300};
+ int Elist[85] =  {10, 14 , 18 , 22 , 26 , 30,  34 , 38 , 42,  46,  50,  54,  58,  62,  66,  70,  74,  78,
+                     82,  86,  90,  94,  98, 102, 106, 110, 114 ,118, 122, 126, 130, 134, 138, 142 ,146, 150,
+                     154 ,158 ,162 ,166 ,170 ,174 ,178, 182, 186, 190 ,194 ,198, 202, 206, 210, 214 ,218, 222,
+                     226, 230, 234 ,238, 242 ,246 ,250, 254, 258 ,262 ,266, 270, 274, 278, 282, 286, 290, 294,
+                     298, 302 ,306, 310, 314, 318 ,322, 326, 330, 334 ,338 ,342 ,346};
+ 
+ float xmin=0, xmax=0,xhigh=0;
+ float mean=0, sigma=0, mean_err=0,sigma_err=0,Err_resolution=0, Err_response=0,resolution=0, response=0;
+ int rebin=4;
+ TF1* fit_func_data = new TF1("fit_func_data","gaus");
+ for(int i_en=0;i_en<85;i_en++)
+   {
+     if(Elist[i_en]<=80)
+       xhigh= 3.0*Elist[i_en];
+     else
+       xhigh= 2.0*Elist[i_en];
+     //      cout<<xhigh<<endl;                                                                                                                                                                       
+     sprintf(hist_name,"%s_Predi_TrueEn_%d_to_%d",data[0],Elist[i_en],Elist[i_en]+4);
+     sprintf(hist_name1,"%s_Predi_TrueEn_%d_to_%d",data[1],Elist[i_en],Elist[i_en]+4);
+     //     sprintf(hist_name2,"MipsInEE_%s_Predi_TrueEn_%s",data[2],Elist[i_en]+2);
+     
+     TH1F* resp= (TH1F*)inputfile->Get(hist_name);
+     TH1F* resp1= (TH1F*)inputfile->Get(hist_name1);
+     //TH1F* resp2= (TH1F*)inputfile->Get(hist_name2);
+     Double_t factor = 1.;
+     //resp2->Scale(factor/resp2->Integral());///resp2->GetEntries());
+     resp1->Scale(factor/resp1->Integral());//resp1->GetEntries()/resp2->GetEntries());
+     resp->Scale(factor/resp->Integral());//resp->GetEntries()/resp2->GetEntries());
+     resp->Rebin(rebin);
+     resp1->Rebin(rebin);
+     //resp2->Rebin(rebin);
+
+     TCanvas *Canvas_n2 = new TCanvas(hist_name, hist_name,800,700);//,1200,1200);
+     Canvas_n2->Range(-60.25,-0.625,562.25,0.625);
+     Canvas_n2->SetFillColor(0);
+     Canvas_n2->SetBorderMode(0);
+     Canvas_n2->SetBorderSize(2);
+
+     TPaveStats *ptstats = new TPaveStats(0.75,0.75,0.9,0.9,"brNDC");
+     ptstats->SetBorderSize(1);
+     ptstats->SetFillColor(0);
+     ptstats->SetLineColor(kRed);
+     ptstats->SetTextAlign(12);
+     ptstats->SetTextColor(kRed);
+     ptstats->SetTextFont(42);
+     ptstats->SetOptStat(1111);
+     ptstats->SetOptFit(1);
+     resp->GetListOfFunctions()->Add(ptstats);
+     ptstats->SetParent(resp);
+
+     TPaveStats *ptstats1 = new TPaveStats(0.75,0.6,0.9,0.75,"brNDC");
+     ptstats1->SetBorderSize(1);
+     ptstats1->SetFillColor(0);
+     ptstats1->SetLineColor(kBlue);
+     ptstats1->SetTextAlign(12);
+     ptstats1->SetTextColor(kBlue);
+     ptstats1->SetTextFont(42);
+     ptstats1->SetOptStat(1111);
+     ptstats1->SetOptFit(1);
+     resp1->GetListOfFunctions()->Add(ptstats1);
+     ptstats1->SetParent(resp1);
+
+     // TPaveStats *ptstats2 = new TPaveStats(0.75,0.45,0.9,0.6,"brNDC");
+     // ptstats2->SetBorderSize(1);
+     // ptstats2->SetFillColor(0);
+     // ptstats2->SetLineColor(kBlack);
+     // ptstats2->SetTextAlign(12);
+     // ptstats2->SetTextColor(kBlack);
+     // ptstats2->SetTextFont(42);
+     // ptstats2->SetOptStat(1111);
+     // ptstats2->SetOptFit(1);
+     // resp2->GetListOfFunctions()->Add(ptstats2);
+     // ptstats2->SetParent(resp2);
+     
+     sprintf(full_path,"%s/Overlay_PredEn_%03d.png",path2,Elist[i_en]+2);
+     resp->GetXaxis()->SetTitle("Predicted energy in GeV");
+     resp1->GetXaxis()->SetTitle("Predicted energy in GeV");
+     // resp2->GetXaxis()->SetTitle("Predicted energy in GeV");
+     sprintf(name,"%s_%d",data[0],Elist[i_en]+2);
+     sprintf(name1,"%s_%d",data[1],Elist[i_en]+2);
+     //sprintf(name2,"%s_%d",data[2],Elist[i_en]);
+     sprintf(title,"PredEn (%d GeV)",Elist[i_en]);//,data[i_data]);
+
+     resp->SetLineColor(kRed);
+     resp1->SetLineColor(kBlue);
+     //     resp2->SetLineColor(kBlack);
+
+     resp->SetLineWidth(2);
+     resp1->SetLineWidth(2);
+     //resp2->SetLineWidth(2);
+     resp->SetName(name);
+     resp->SetTitle(title);
+     resp1->SetName(name1);
+     resp1->SetTitle(title);
+     // resp2->SetName(name2);
+     // resp2->SetTitle(title);
+     resp->GetXaxis()->SetRangeUser(0,xhigh);
+     resp1->GetXaxis()->SetRangeUser(0,xhigh);
+     //resp2->GetXaxis()->SetRangeUser(0,xhigh);
+     auto legend = new TLegend(0.75,0.25,0.9,0.4);
+     legend->SetHeader("","C");
+     legend->AddEntry(resp,"validation","l");
+     legend->AddEntry(resp1,"training","l");
+     //legend->AddEntry(resp2,"TB Data","l");
+
+     resp->Draw("HIST");
+     resp1->Draw("HIST sames");
+     //resp2->Draw("HIST sames");
+     legend->Draw("sames");
+     Canvas_n2->Modified();
+     Canvas_n2->cd();
+     Canvas_n2->SetSelected(Canvas_n2);
+     Canvas_n2->SaveAs(full_path);
+
+   }
+}

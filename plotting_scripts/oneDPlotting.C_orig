@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include<fstream>
+#include <vector>
+#include <string>
+#include <map>
+#include<iostream>
+using namespace std;
+void oneDPlotting(string filename)
+{
+  char* hname = new char[200];
+  char* hist_name  = new char[200];
+  char* hist_name1 = new char[200];
+  char* hist_name2 = new char[200];
+  char* full_path = new char[2000];
+  char* full_path1 = new char[2000];
+  char* full_path2 = new char[2000];
+  char* path2 = new char[2000];
+  char* title= new char[2000];
+
+  char* full_path3 = new char[2000];
+  char* full_path4 = new char[2000];
+  char* full_path5 = new char[2000];
+  char* full_path6 = new char[2000];
+  char* full_path7 = new char[2000];
+  char* full_path8 = new char[2000];
+  char* full_path9 = new char[2000];
+  char* full_path10 = new char[2000];
+ char* full_path11= new char[2000];
+  sprintf(hname,"%s",filename.c_str());
+  sprintf(path2,"Results");//,//filename.c_str());
+  TFile * inputfile = new TFile(hname,"READ");
+ char* name=new char[1000];
+  int rebin=2;
+const char *data[2] = { "withScaling", "withoutScaling"
+                              };
+ const char *epoch[3] = { "25", "52","75"
+                              };
+
+ for (int i_data=0; i_data<1;i_data++)
+    {
+      for(int i_e=0; i_e<1;i_e++)
+	{
+	  sprintf(hist_name,"Predi_nosemi_withoutScaling_25");//%s_%s",data[i_data],epoch[i_e]);
+	  // 	  sprintf(hist_name,"Predi_nosemi_%s_%s",data[i_data],epoch[i_e]);
+	  // sprintf(hist_name1,"PrediVsTrue_nosemi_%s_%s",data[i_data],epoch[i_e]);
+	 sprintf(hist_name1,"PrediVsTrue_nosemi_withoutScaling_25");
+	  TH1F* resp= (TH1F*)inputfile->Get(hist_name);
+	  TH2F* resp1= (TH2F*)inputfile->Get(hist_name1);
+	  TCanvas *Canvas_n2 = new TCanvas(hist_name, hist_name,600,600,1200,1200);
+          Canvas_n2->Range(-60.25,-0.625,562.25,0.625);
+          Canvas_n2->SetFillColor(0);
+          Canvas_n2->SetBorderMode(0);
+          Canvas_n2->SetBorderSize(2);
+          TPaveStats *ptstats2 = new TPaveStats(0.15,0.1,0.35,0.3,"brNDC");
+          ptstats2->SetBorderSize(2);
+          ptstats2->SetFillColor(0);
+          ptstats2->SetLineColor(kBlue);
+          ptstats2->SetTextAlign(12);
+          ptstats2->SetTextColor(kBlue);
+          ptstats2->SetTextFont(42);
+          ptstats2->SetOptStat(1111);
+          ptstats2->SetOptFit(1);
+          resp->GetListOfFunctions()->Add(ptstats2);
+          ptstats2->SetParent(resp);
+	  gStyle->SetOptStat(0);
+	  //	  sprintf(full_path,"%s/PrediEn_nosemi_%s_%s.png",path2,data[i_data],epoch[i_e]);
+	  //sprintf(full_path1,"%s/PredEnVsTrueEn_nosemi_%s_%s.png",path2,data[i_data],epoch[i_e]);
+	   sprintf(full_path,"%s/PrediEn_nosemi_wScaMC_1M_50to300.png",path2);
+	  sprintf(full_path1,"%s/PrediVsTrue_nosemi_withoutScaling_1M_50to300_lr3e03.png",path2);
+	  resp->SetLineWidth(2);
+	  resp->SetTitle("");
+	  resp->GetXaxis()->SetTitle("predicted beam energy in GeV");
+	  //resp->Rebin(rebin);
+	  resp->GetXaxis()->SetRangeUser(0,450);
+	  //	  resp->GetYaxis()->SetRangeUser(0.1,6000);
+	  resp->Draw();
+	  Canvas_n2->Modified();
+          Canvas_n2->cd();
+          Canvas_n2->SetSelected(Canvas_n2);
+          Canvas_n2->SaveAs(full_path);
+
+	  TCanvas *Canvas_n1 = new TCanvas(hist_name1, hist_name1,600,600,1200,1200);
+          Canvas_n1->Range(-60.25,-0.625,562.25,0.625);
+          Canvas_n1->SetFillColor(0);
+          Canvas_n1->SetBorderMode(0);
+          Canvas_n1->SetBorderSize(2);
+	  Canvas_n1->cd();
+
+	  gStyle->SetOptStat(0);
+	  resp1->GetXaxis()->SetTitle("true energy in GeV");
+	  resp1->GetYaxis()->SetTitle("Predicted energy in GeV");
+	  resp1->GetXaxis()->SetRangeUser(0,352);
+	  resp1->GetYaxis()->SetRangeUser(0,600);
+	  resp1->SetMaximum(100);
+	   resp1->SetTitle("");
+
+	  resp1->Draw("colz");
+          Canvas_n1->Modified();
+          Canvas_n1->cd();
+          Canvas_n1->SetSelected(Canvas_n1);
+          Canvas_n1->SaveAs(full_path1);
+
+
+       
+	}
+    }
+}
