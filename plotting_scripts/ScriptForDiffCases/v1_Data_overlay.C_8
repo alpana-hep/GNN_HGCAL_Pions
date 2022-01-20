@@ -31,7 +31,7 @@ void v1_Data_overlay(string file_name, string file_name_test)//, string file_nam
 sprintf(hname,"%s",file_name.c_str());
  sprintf(hname1,"%s",file_name_test.c_str());
 
- sprintf(path2,"Results/CorrAlignTB/");//,file_name.c_str());
+ sprintf(path2,"Results/");//,file_name.c_str());
   TFile * inputfile = new TFile(hname,"READ");
    TFile * inputfile1 = new TFile(hname1,"READ");
 
@@ -56,17 +56,17 @@ const char *eve_cat[2] = { "SSinEE", "MipsInEE"};
   // for(int i=0;i<2;i++)
     
   //       {
- sprintf(full_path1,"%s/overlay_reso_Tbaligncorr_all.png",path2);//,eve_cat[i]);
- sprintf(full_path2,"%s/overlay_resp_Tbaligncorr_all.png",path2);//,eve_cat[i]);
+ sprintf(full_path1,"%s/overlay_reso_trimAhcal_v1_all.png",path2);//,eve_cat[i]);
+ sprintf(full_path2,"%s/overlay_resp_trimAhcal_v1_all.png",path2);//,eve_cat[i]);
 TMultiGraph* mg = new TMultiGraph();
   TMultiGraph* mg1 = new TMultiGraph();
-auto legend = new TLegend(0.5,0.65,0.9,0.9);
+auto legend = new TLegend(0.65,0.65,0.9,0.9);
   legend->SetHeader("","C");
   gStyle->SetLegendTextSize(0.04);
-  auto legend1 = new TLegend(0.5,0.1,0.9,0.3);
+  auto legend1 = new TLegend(0.65,0.1,0.9,0.3);
   legend1->SetHeader("","C");
 
-  for (int i_data=0; i_data<3;i_data++)
+  for (int i_data=0; i_data<2;i_data++)
     {
       sprintf(hist_name1,"Resolution_%s",data[i_data]);
       sprintf(hist_name,"Response_%s",data[i_data]);
@@ -79,14 +79,14 @@ auto legend = new TLegend(0.5,0.65,0.9,0.9);
       h_resolution_valid->GetYaxis()->SetTitleOffset(1.4);
       h_resolution_valid->GetYaxis()->SetTitle("sigma/Mean (GeV)");
       h_resolution_valid->SetMarkerColorAlpha(col[i_data], 0.95);
-      h_resolution_valid->SetMarkerSize(1.5);
+      h_resolution_valid->SetMarkerSize(2);
       h_resolution_valid->SetMarkerStyle(marker[i_data]);
       h_response_valid->SetTitle(" ");
       h_response_valid->GetXaxis()->SetTitle("Beam energy (GeV)");
       h_response_valid->GetYaxis()->SetTitleOffset(1.4);
       h_response_valid->GetYaxis()->SetTitle("Mean (GeV)/ Beam energy");
       h_response_valid->SetMarkerColorAlpha(col[i_data], 0.95);
-      h_response_valid->SetMarkerSize(1.5);
+      h_response_valid->SetMarkerSize(2);
       h_response_valid->SetMarkerStyle(marker[i_data]);
       //      if(i_data==1) continue;
       mg->Add(h_resolution_valid);
@@ -94,30 +94,27 @@ auto legend = new TLegend(0.5,0.65,0.9,0.9);
       legend->AddEntry(h_resolution_valid,data_1[i_data],"p");
       legend1->AddEntry(h_resolution_valid,data_1[i_data],"p");
     }
- // sprintf(hist_name8,"Response_Total");
- // sprintf(hist_name9,"Resolution_Total");
-   sprintf(hist_name8,"response_data_chi2methodEbeam_all_gaus_data.txt");
-    sprintf(hist_name9,"resolution_data_chi2methodEbeam_all_gaus_data.txt");
-
+ sprintf(hist_name8,"Response_Total");
+ sprintf(hist_name9,"Resolution_Total");
 TGraphErrors* h_resolution_shubham = (TGraphErrors*)inputfile1->Get(hist_name9);
     TGraphErrors* h_response_shubham = (TGraphErrors*)inputfile1->Get(hist_name8);
-    h_resolution_shubham->SetMarkerColorAlpha(kBlue,0.99);
-    h_resolution_shubham->SetMarkerSize(1.5);
+    h_resolution_shubham->SetMarkerColorAlpha(kBlack,0.99);
+    h_resolution_shubham->SetMarkerSize(2);
     h_resolution_shubham->SetMarkerStyle(32);
-    h_resolution_shubham->SetLineColor(kBlue);
+    h_resolution_shubham->SetLineColor(kBlack);
     h_resolution_shubham->SetLineStyle(1);
     h_resolution_shubham->SetLineWidth(2);
-    h_response_shubham->SetMarkerColorAlpha(kBlue, 0.95);
-    h_response_shubham->SetMarkerSize(1.5);
+    h_response_shubham->SetMarkerColorAlpha(kBlack, 0.95);
+    h_response_shubham->SetMarkerSize(2);
     h_response_shubham->SetMarkerStyle(32);
-    h_response_shubham->SetLineColor(kBlue);
+    h_response_shubham->SetLineColor(kBlack);
     h_response_shubham->SetLineStyle(1);
     h_response_shubham->SetLineWidth(2);
 
     mg->Add(h_resolution_shubham);
     mg1->Add(h_response_shubham);
-    legend->AddEntry(h_resolution_shubham,"TB data (#chi^{2} method)","p");
-    legend1->AddEntry(h_resolution_shubham,"TB data (#chi^{2} method)","p");
+    legend->AddEntry(h_resolution_shubham,"#chi^{2} method","p");
+    legend1->AddEntry(h_resolution_shubham,"#chi^{2} method","p");
     TCanvas *canvas_n1 = new TCanvas(hist_name, hist_name,900,700);//600,600,1200,1200);
   canvas_n1->Range(-60.25,-0.625,562.25,0.625);
   canvas_n1->SetFillColor(0);
@@ -136,7 +133,7 @@ gPad->Modified();
 mg->Draw("ALP");legend->Draw("sames");gPad->Modified();
   gPad->Update();
   mg->SetMinimum(0.02);
-  mg->SetMaximum(0.3);
+  mg->SetMaximum(0.6);
   legend->Draw("sames");
   canvas_n1->Modified();
   canvas_n1->cd();
@@ -155,11 +152,11 @@ mg->Draw("ALP");legend->Draw("sames");gPad->Modified();
   TAxis *axis51=  mg1->GetYaxis();
   axis51->SetRangeUser(0.9,1.4);
   canvas_n2->SetGrid();
-  mg1->GetHistogram()->GetYaxis()->SetRangeUser(0.8,1.3);
+  mg1->GetHistogram()->GetYaxis()->SetRangeUser(0.8,1.2);
   gPad->Modified();
   gPad->Update();
   mg1->Draw("ALP");
-  TLine* l=new TLine(0,1,300,1);
+  TLine* l=new TLine(0,1,350,1);
   l->Draw("sames");
   legend1->Draw("sames");
   gPad->Modified();

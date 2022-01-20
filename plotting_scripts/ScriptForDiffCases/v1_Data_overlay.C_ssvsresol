@@ -31,46 +31,72 @@ void v1_Data_overlay(string file_name)//_valid, string file_name_test, string fi
   char* hname2 = new char[200];
   char* hname3 = new char[200];
   sprintf(hname,"%s",file_name.c_str());
- sprintf(path2,"Results/Event_categ");//,file_name.c_str());
+ sprintf(path2,"Results//Resol_vs_SS/sixSS");//,file_name.c_str());
   TFile * inputfile = new TFile(hname,"READ");
 const char *data[5] = { "Valid", "Train",
                          "Tbdata","QGSP","FTFP" };
-const char *Energy[8]={"20","50","80","100","120","200","250","300"};
+// const char *data1[10]={"SS layer 6","SS layer 12","SS layer 18","SS layer 24","SS layer 28","SS layer 31","SS layer 35","SS layer 38","SS layer 40","Inclusive"};
+ const char *data1[7]={"SS layer 10","SS layer 20","SS layer 28","SS layer 32","SS layer 36","SS layer 40","Inclusive"};
+ const char *Energy[8]={"20","50","80","100","120","200","250","300"};
  int Elist[8]={20,50,80,100,120,200,250,300};
  int marker[5]={8, 22,21, 29, 34};
- int col[5]={kRed,kBlue,kBlack,kMagenta,kCyan+2};//,kBlue,kRed,kBlue+2,kMagenta,kCyan};
+ int SS_loc[9]={10,20,28,32,36,40};//kMagenta,,35,38,40};
+ // int col[10]={kPink+2,kBlue,kRed,kBlue+2,kMagenta,kCyan,kGreen,kOrange,kViolet-3,kBlack};//kBlue+3,kBlue+2,kBlue+1,kCyan,kCyan-2,kCyan-3,kCyan-4,kCyan-10};//kViolet,kViolet-1,kViolet-2,kViolet-3,kViolet-4};//{kRed,kBlue,kBlack,kMagenta,kCyan+2};//,kBlue,kRed,kBlue+2,kMagenta,kCyan};
+ int col[7]={kBlue,kRed,kCyan,kViolet-3,kGreen,kMagenta,kBlack};
  TMultiGraph* mg = new TMultiGraph();
   TMultiGraph* mg1 = new TMultiGraph();
 auto legend = new TLegend(0.55,0.6,0.9,0.9);
   legend->SetHeader("","C");
-  gStyle->SetLegendTextSize(0.05);
+  gStyle->SetLegendTextSize(0.01);
   auto legend1 = new TLegend(0.55,0.6,0.9,0.9);
   legend1->SetHeader("","C");
   const char *eve_cat[3] = {"", "_SSinEE", "_MipsInEE"};
-  const char *data1[3]={"Inclusive","SSinEE","MipsInEE"};
+  //  const char *data1[3]={"Inclusive","SSinEE","MipsInEE"};
  // sprintf(full_path1,"%s/%s_overlay_resolution_v1.png",eve_cat[0],path2);
  //      sprintf(full_path2,"%s/%s_overlay_response_v1.png",path2);
       //const char *eve_cat[2] = { "SSinEE", "MipsInEE"};
   // for(int i=0;i<2;i++)
     
   //       {
- for (int i_data=0; i_data<3;i_data++)
+  for (int i_data=0; i_data<3;i_data++)
     {
-      sprintf(full_path1,"%s/%s_EvtCateg_resolution.png",path2,data[i_data]);
-      sprintf(full_path2,"%s/%s_EvtCateg_response.png",path2,data[i_data]);
+      sprintf(full_path1,"%s/%s_diffSSloc_resolution.png",path2,data[i_data]);
+      sprintf(full_path2,"%s/%s_diffSSloc_response.png",path2,data[i_data]);
+      
+      // for (int i_ss=0; i_ss<9;i_ss++)
+      //   {
+	  
+      // for (int i_data=0; i_data<3;i_data++)
+      //    {
+      // sprintf(full_path1,"%s/%s_EvtCateg_resolution.png",path2,data[i_data]);
+      // sprintf(full_path2,"%s/%s_EvtCateg_response.png",path2,data[i_data]);
       TMultiGraph* mg = new TMultiGraph();
       TMultiGraph* mg1 = new TMultiGraph();
       auto legend = new TLegend(0.55,0.6,0.9,0.9);
       legend->SetHeader("","C");
-      gStyle->SetLegendTextSize(0.05);
-      auto legend1 = new TLegend(0.55,0.6,0.9,0.9);
-      legend1->SetHeader("","C");
-
-      for (int i=0; i<3;i++)
-	{
-	  sprintf(hist_name1,"Resolution%s_%s",eve_cat[i],data[i_data]);
-	  sprintf(hist_name,"Response%s_%s",eve_cat[i],data[i_data]);
-	  //cout<<hist_name1<<endl;
+      gStyle->SetLegendTextSize(0.03);
+      // if(i_data==2)
+	auto legend1 = new TLegend(0.1,0.1,0.4,0.4);
+	legend1->SetHeader("","C");
+	
+      
+	auto legend2 = new TLegend(0.55,0.65,0.9,0.9);
+	legend2->SetHeader("","C");
+	
+      for (int i=0; i<7;i++)
+        {
+	  if(i==6)
+	    {
+	      sprintf(hist_name1,"Resolution_%s",data[i_data]);
+              sprintf(hist_name,"Response_%s",data[i_data]);
+ 
+	    }
+	  else
+	    {
+	      sprintf(hist_name1,"Resolution_%s_%d",data[i_data],SS_loc[i]);//,data[i_data]);
+	      sprintf(hist_name,"Response_%s_%d",data[i_data],SS_loc[i]);//,data[i_data]);
+	    }
+	  cout<<hist_name1<<endl;
 	  // sprintf(full_path1,"%s/overlay_resolution.png",path2);
 	  // sprintf(full_path2,"%s/overlay_response.png",path2);
 	  TGraphErrors* h_resolution_valid = (TGraphErrors*)inputfile->Get(hist_name1);
@@ -93,6 +119,7 @@ auto legend = new TLegend(0.55,0.6,0.9,0.9);
 	  mg1->Add(h_response_valid);
 	  legend->AddEntry(h_resolution_valid,data1[i],"p");
 	  legend1->AddEntry(h_resolution_valid,data1[i],"p");
+	  legend2->AddEntry(h_resolution_valid,data1[i],"p");
 	}
       TCanvas *canvas_n1 = new TCanvas(hist_name, hist_name,600,600,1200,1200);
       canvas_n1->Range(-60.25,-0.625,562.25,0.625);
@@ -110,10 +137,10 @@ auto legend = new TLegend(0.55,0.6,0.9,0.9);
       canvas_n1->cd();
       gPad->Modified();
       gPad->Update();
-      mg->Draw("ALP");legend->Draw("sames");gPad->Modified();
+      mg->Draw("AP");legend->Draw("sames");gPad->Modified();
       gPad->Update();
       mg->SetMinimum(0.02);
-      mg->SetMaximum(0.3);
+      mg->SetMaximum(0.23);
       legend->Draw("sames");
       canvas_n1->Modified();
       canvas_n1->cd();
@@ -133,13 +160,16 @@ auto legend = new TLegend(0.55,0.6,0.9,0.9);
       TAxis *axis51=  mg1->GetYaxis();
       axis51->SetRangeUser(0.9,1.4);
       canvas_n2->SetGrid();
-      mg1->GetHistogram()->GetYaxis()->SetRangeUser(0.8,1.2);
+      mg1->GetHistogram()->GetYaxis()->SetRangeUser(0.85,1.15);
       gPad->Modified();
       gPad->Update();
-      mg1->Draw("ALP");
-      TLine* l=new TLine(0,1,350,1);
+      mg1->Draw("AP");
+      TLine* l=new TLine(0,1,300,1);
       l->Draw("sames");
-      legend1->Draw("sames");
+      // if(i_data==2)
+      // 	legend1->Draw("sames");
+      // else
+	legend2->Draw("sames");
       gPad->Modified();
       gPad->Update();
       canvas_n2->Modified();

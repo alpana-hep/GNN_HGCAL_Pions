@@ -31,7 +31,7 @@ void DataOverlay(string file_name)//_valid, string file_name_test, string file_n
   sprintf(hname,"%s",file_name.c_str());
   // sprintf(hname1,"%s",file_name_test.c_str());
   // sprintf(hname2,"%s",file_name_data.c_str());
-  sprintf(path2,"Results/CorrAlignTB",file_name.c_str());
+  sprintf(path2,"Results/",file_name.c_str());
   TFile * inputfile = new TFile(hname,"READ");
   // TFile * inputfile1 = new TFile(hname1,"READ");
   // TFile * inputfile2 = new TFile(hname2,"READ");
@@ -124,11 +124,11 @@ void DataOverlay(string file_name)//_valid, string file_name_test, string file_n
   TAxis *axis5=  mg->GetYaxis();
   axis5->SetRangeUser(0.02,0.3);
   canvas_n1->SetGrid();
-  auto legend = new TLegend(0.6,0.6,0.9,0.9);
+  auto legend = new TLegend(0.7,0.7,0.9,0.9);
   legend->SetHeader("","C");
-  legend->AddEntry(h_resolution_valid,"Validation","p");
-  legend->AddEntry(h_resolution_test,"Training","p");
-  legend->AddEntry(h_resolution_data,"TB Data","p");
+  legend->AddEntry(h_resolution_valid,"valid","p");
+  legend->AddEntry(h_resolution_test,"training","p");
+  legend->AddEntry(h_resolution_data,"Data","p");
   gStyle->SetLegendTextSize(0.05);
   canvas_n1->cd();
   mg->Add(h_resolution_valid);
@@ -188,7 +188,7 @@ void DataOverlay(string file_name)//_valid, string file_name_test, string file_n
   mg1->Draw("LP");
   TLine* l=new TLine(0,1,350,1);
   l->Draw("sames");
-  legend->Draw("sames");
+  legend1->Draw("sames");
   gPad->Modified();
   gPad->Update();
   // mg1->SetMinimum(0.1);

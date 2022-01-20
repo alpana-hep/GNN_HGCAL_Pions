@@ -20,3 +20,9 @@ get the overlay one-d distributions
 ** overlayPlots.C_beamEn: this script is to be run over root file which has only 8 histograms for eahc of datasets, 
 
 You can ignore other scripts for now
+
+
+** The sccripts that have *.C_** these corresponds to different scripts for different scenarios. And depending upon your need you can copy these to default script and run
+For example : plotResolution.C (reads histogram and after fitting extract the mean and sigma) and if you want to do the same for different event categories then use EventCat_plotResolution.C
+
+And for DataOverlay.C you copy DataOverlay.C_eventCateg to DataOverlay.C and run it for event categories.

@@ -40,10 +40,10 @@ const char *data[2] = { "withScaling", "withoutScaling"
     {
       for(int i_e=0; i_e<1;i_e++)
 	{
-	  sprintf(hist_name,"Predi_nosemi_withoutScaling_25");//%s_%s",data[i_data],epoch[i_e]);
+	  sprintf(hist_name,"Predi_ratio");//Predi_nosemi_withoutScaling_25");//%s_%s",data[i_data],epoch[i_e]);
 	  // 	  sprintf(hist_name,"Predi_nosemi_%s_%s",data[i_data],epoch[i_e]);
 	  // sprintf(hist_name1,"PrediVsTrue_nosemi_%s_%s",data[i_data],epoch[i_e]);
-	  sprintf(hist_name1,"PrediVsTrue_nosemi_withoutScaling_25");
+	  sprintf(hist_name1,"PrediVsTrue_nosemi_withScaling_75");
 	  //sprintf(hist_name1,"PrediVsTrue_nosemi_withScaling_75");
 	  TH1F* resp= (TH1F*)inputfile->Get(hist_name);
 	  TH2F* resp1= (TH2F*)inputfile->Get(hist_name1);
@@ -64,14 +64,14 @@ const char *data[2] = { "withScaling", "withoutScaling"
           resp->GetListOfFunctions()->Add(ptstats2);
           ptstats2->SetParent(resp);
 	  gStyle->SetOptStat(0);
-	  //	  gPad->SetLogy();
+		  gPad->SetLogy();
 	  //	  sprintf(full_path,"%s/PrediEn_nosemi_%s_%s.png",path2,data[i_data],epoch[i_e]);
 	  //sprintf(full_path1,"%s/PredEnVsTrueEn_nosemi_%s_%s.png",path2,data[i_data],epoch[i_e]);
-	   sprintf(full_path,"%s/prediEn_.png",path2);
-	  sprintf(full_path1,"%s/PrediVsTrue.png",path2);
+	   sprintf(full_path,"%s/predRatio_.png",path2);
+	  sprintf(full_path1,"%s/truevspred_ratio.png",path2);
 	  resp->SetLineWidth(2);
 	  resp->SetTitle("");
-	  resp->GetXaxis()->SetTitle("predicted beam energy in GeV");
+	  resp->GetXaxis()->SetTitle("ratio");
 	  //resp->Rebin(rebin);
 	  resp->GetXaxis()->SetRangeUser(0,500);
 	  //	  resp->GetYaxis()->SetRangeUser(0.1,6000);
@@ -89,8 +89,8 @@ const char *data[2] = { "withScaling", "withoutScaling"
 	  Canvas_n1->cd();
 
 	  gStyle->SetOptStat(0);
-	  resp1->GetXaxis()->SetTitle("true energy in GeV");
-	  resp1->GetYaxis()->SetTitle("Predicted energy in GeV");
+	  resp1->GetXaxis()->SetTitle("true ratio");
+	  resp1->GetYaxis()->SetTitle("Predicted ratio");
   resp1->GetXaxis()->SetRangeUser(0,380);
 	  resp1->GetYaxis()->SetRangeUser(0,500);
 	  resp1->SetMaximum(300);

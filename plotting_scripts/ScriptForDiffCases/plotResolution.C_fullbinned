@@ -38,7 +38,7 @@ char* full_path = new char[2000];
   char* resp_name=new char[1000];
   char* name=new char[1000];
   int rebin=2;
-  TFile* file = new TFile("PionResolution_40epoch_absloss_lr1e04_fullbinned.root","RECREATE");
+  TFile* file = new TFile("PionRes_50epoch_lr1e04_fullbinned.root","RECREATE");
  const char *data[3] = { "Valid", "Train",
                              "Tbdata" };
 int Elist[85] =  {10, 14 , 18 , 22 , 26 , 30,  34 , 38 , 42,  46,  50,  54,  58,  62,  66,  70,  74,  78,

@@ -1,0 +1,201 @@
+#include <stdio.h>
+#include<fstream>
+#include <vector>
+#include <string>
+#include <map>
+#include<iostream>
+using namespace std;
+double calculateError(float x, float y, float ex, float ey,float cov )
+{
+  return (x/y)*(sqrt(((ex/x)*(ex/x))+((ey/y)*(ey/y))-(2*cov/x*y)));
+    }
+void v1_overlayplots(string filename, string filename1, string filename2)
+{
+  char* hname = new char[200];
+  char* hname1 = new char[200];
+  char* hname2 = new char[200];
+
+  char* hist_name  = new char[200];
+  char* hist_name1 = new char[200];
+  char* hist_name2 = new char[200];
+  char* full_path = new char[2000];
+  char* full_path1 = new char[2000];
+  char* full_path2 = new char[2000];
+  char* path2 = new char[2000];
+  char* title= new char[2000];
+  char* title1= new char[2000];char* title2= new char[2000];
+  char* full_path3 = new char[2000];
+  char* full_path4 = new char[2000];
+  char* full_path5 = new char[2000];
+  char* full_path6 = new char[2000];
+  char* full_path7 = new char[2000];
+  char* full_path8 = new char[2000];
+  char* full_path9 = new char[2000];
+  char* full_path10 = new char[2000];
+  char* full_path11= new char[2000];
+  sprintf(hname,"%s",filename.c_str());
+  sprintf(hname1,"%s",filename1.c_str());
+  sprintf(hname2,"%s",filename2.c_str());
+
+  sprintf(path2,"Results",filename.c_str());
+  TFile * inputfile = new TFile(hname,"READ");
+  TFile * inputfile1 = new TFile(hname1,"READ");
+  TFile * inputfile2 = new TFile(hname2,"READ");
+
+  char* reso_name=new char[1000];
+  char* resp_name=new char[1000];
+  char* name=new char[1000];
+  char* name1=new char[1000];
+  char* name2=new char[1000];
+const char *data[3] = { "Valid", "Train",
+		                                    "Tbdata" };
+for(int i_data=0; i_data<2; i_data++)
+  {
+    sprintf(hist_name,"Response_%s", data[i_data]);
+    sprintf(hist_name1,"Resolution_%s",data[i_data]);
+     TGraphErrors* h_resolution = (TGraphErrors*)inputfile->Get(hist_name1);
+    TGraphErrors* h_response = (TGraphErrors*)inputfile->Get(hist_name);
+    TGraphErrors* h_resolution1 = (TGraphErrors*)inputfile1->Get(hist_name1);
+    TGraphErrors* h_response1 = (TGraphErrors*)inputfile1->Get(hist_name);
+    TGraphErrors* h_resolution2 = (TGraphErrors*)inputfile2->Get(hist_name1);
+    TGraphErrors* h_response2 = (TGraphErrors*)inputfile2->Get(hist_name);
+    sprintf(full_path1,"%s/overlay_resolution__v1_%s.png",path2,data[i_data]);
+    sprintf(full_path2,"%s/overlay_response_v1_%s.png",path2,data[i_data]);
+
+    h_resolution->SetTitle(" ");
+    h_resolution->GetXaxis()->SetTitle("Beam energy (GeV)");
+    h_resolution->GetYaxis()->SetTitleOffset(1.4);
+    h_resolution->GetYaxis()->SetTitle("sigma/Mean (GeV)");
+    h_resolution->SetMarkerColorAlpha(kBlue, 0.95);
+    h_resolution->SetMarkerSize(1.5);
+    h_resolution->SetMarkerStyle(8);
+
+    h_resolution1->SetTitle(" ");
+    h_resolution1->GetXaxis()->SetTitle("Beam energy (GeV)");
+    h_resolution1->GetYaxis()->SetTitleOffset(1.4);
+    h_resolution1->GetYaxis()->SetTitle("sigma/Mean (GeV)");
+    h_resolution1->SetMarkerColorAlpha(kRed, 0.95);
+    h_resolution1->SetMarkerSize(1.5);
+    h_resolution1->SetMarkerStyle(21);
+
+    h_resolution2->SetTitle(" ");
+    h_resolution2->GetXaxis()->SetTitle("Beam energy (GeV)");
+    h_resolution2->GetYaxis()->SetTitleOffset(1.4);
+    h_resolution2->GetYaxis()->SetTitle("sigma/Mean (GeV)");
+    h_resolution2->SetMarkerColorAlpha(kBlack, 0.95);
+    h_resolution2->SetMarkerSize(1.5);
+    h_resolution2->SetMarkerStyle(23);
+
+  h_response->SetTitle(" ");
+  h_response->GetXaxis()->SetTitle("Beam energy (GeV)");
+  h_response->GetYaxis()->SetTitleOffset(1.4);
+  h_response->GetYaxis()->SetTitle("Mean (GeV)/ Beam energy");
+  h_response->SetMarkerColorAlpha(kBlue, 0.95);
+  h_response->SetMarkerSize(1.5);
+  h_response->SetMarkerStyle(8);
+
+ h_response1->SetTitle(" ");
+  h_response1->GetXaxis()->SetTitle("Beam energy (GeV)");
+  h_response1->GetYaxis()->SetTitleOffset(1.4);
+  h_response1->GetYaxis()->SetTitle("Mean (GeV)/ Beam energy");
+  h_response1->SetMarkerColorAlpha(kRed, 0.95);
+  h_response1->SetMarkerSize(1.5);
+  h_response1->SetMarkerStyle(21);
+
+ h_response2->SetTitle(" ");
+  h_response2->GetXaxis()->SetTitle("Beam energy (GeV)");
+  h_response2->GetYaxis()->SetTitleOffset(1.4);
+  h_response2->GetYaxis()->SetTitle("Mean (GeV)/ Beam energy");
+  h_response2->SetMarkerColorAlpha(kBlack, 0.95);
+  h_response2->SetMarkerSize(1.5);
+  h_response2->SetMarkerStyle(22);
+
+TMultiGraph* mg = new TMultiGraph();
+  TMultiGraph* mg1 = new TMultiGraph();
+  TCanvas *canvas_n1 = new TCanvas(hist_name, hist_name,600,600,1200,1200);//800,800,1400,1400);
+  canvas_n1->Range(-60.25,-0.625,562.25,0.625);
+  canvas_n1->SetFillColor(0);
+  canvas_n1->SetBorderMode(0);
+  canvas_n1->SetBorderSize(2);
+  mg->SetTitle("resolution for pions  ");
+  mg->GetXaxis()->SetTitle("Beam energy (GeV)");
+  mg->GetYaxis()->SetTitleOffset(1.4);
+  mg->GetYaxis()->SetTitle("sigma/mean");
+TAxis *axis5=  mg->GetYaxis();
+  axis5->SetRangeUser(0.02,0.3);
+  canvas_n1->SetGrid();
+  auto legend = new TLegend(0.5,0.7,0.9,0.9);
+  legend->SetHeader("","C");
+   legend->AddEntry(h_response,"nolimit_onCorrec","p");
+  legend->AddEntry(h_response1,"limit_onCorrec","p");
+    legend->AddEntry(h_response2,"BestModel","p");
+ gStyle->SetLegendTextSize(0.035);
+
+  // legend->AddEntry(h_resolution,"Total","p");
+  // legend->AddEntry(h_resolution1,"SSinEE","p");
+  // legend->AddEntry(h_resolution2,"MipsinEE","p");
+  canvas_n1->cd();
+  mg->Add(h_resolution);
+  mg->Add(h_resolution2);
+  gPad->Modified();
+  gPad->Update();
+  h_resolution1->SetMinimum(0.02);
+  h_resolution1->SetMaximum(0.3);
+  h_resolution1->Draw("ALP");
+
+  mg->Draw("LP");
+legend->Draw("sames");
+gPad->Modified();
+  gPad->Update();
+  mg->SetMinimum(0.02);
+  mg->SetMaximum(0.25);
+ legend->Draw("sames");
+  canvas_n1->Modified();
+  canvas_n1->cd();
+  canvas_n1->SetSelected(canvas_n1);
+  canvas_n1->SaveAs(full_path1);
+
+  TCanvas *canvas_n2 = new TCanvas(hist_name1, hist_name1,600,600,1200,1200);
+  canvas_n2->Range(-60.25,-0.625,562.25,0.625);
+  canvas_n2->SetFillColor(0);
+  canvas_n2->SetBorderMode(0);
+  canvas_n2->SetBorderSize(2);
+  mg1->SetTitle("response for pions  ");
+  mg1->GetXaxis()->SetTitle("Beam energy (GeV)");
+  mg1->GetYaxis()->SetTitleOffset(1.4);
+  mg1->GetYaxis()->SetTitle("mean/beam energy");
+  TAxis *axis51=  mg1->GetYaxis();
+  axis51->SetRangeUser(0.9,1.4);
+  canvas_n2->SetGrid();
+  mg1->GetHistogram()->GetYaxis()->SetRangeUser(0.5,1.3);
+  mg1->Add(h_response);
+  mg1->Add(h_response2);
+
+  // mg1->Add
+  gPad->Modified();
+  gPad->Update();
+  h_response1->GetHistogram()->GetYaxis()->SetRangeUser(0.8,1.2);
+  h_response1->Draw("ALP");
+   auto legend1 = new TLegend(0.5,0.7,0.9,0.9);
+  legend1->SetHeader("","C");
+  legend1->AddEntry(h_response,"RechitsGeV_5M","p");
+  legend1->AddEntry(h_response1,"RechitsGeV_1M","p");
+  legend1->AddEntry(h_response2,"BestModel_5M","p");
+ gStyle->SetLegendTextSize(0.035);
+
+ 
+  mg1->Draw("LP");
+  TLine* l=new TLine(0,1,300,1);
+  l->Draw("sames");
+  legend1->Draw("sames");
+  gPad->Modified();
+  gPad->Update();
+
+  canvas_n2->Modified();
+  canvas_n2->cd();
+  canvas_n2->SetSelected(canvas_n2);
+  canvas_n2->SaveAs(full_path2);
+
+
+  }
+}

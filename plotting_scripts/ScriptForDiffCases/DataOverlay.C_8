@@ -31,7 +31,7 @@ void DataOverlay(string file_name)//_valid, string file_name_test, string file_n
   sprintf(hname,"%s",file_name.c_str());
   // sprintf(hname1,"%s",file_name_test.c_str());
   // sprintf(hname2,"%s",file_name_data.c_str());
-  sprintf(path2,"Results/CorrAlignTB",file_name.c_str());
+  sprintf(path2,"Results/",file_name.c_str());
   TFile * inputfile = new TFile(hname,"READ");
   // TFile * inputfile1 = new TFile(hname1,"READ");
   // TFile * inputfile2 = new TFile(hname2,"READ");
