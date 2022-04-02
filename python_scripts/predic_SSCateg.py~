@@ -22,10 +22,10 @@ preds_ratio[preds_ratio>3] = 3
 print(preds_ratio[preds_ratio>3])
 
 
-trueEn ="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M_fix_raw_ahcalTrim_up/ratio_target.pickle"
+trueEn ="/home/rusack/shared/pickles/HGCAL_TestBeam/test_0to5M_fix_raw_ahcalTrim_up/ratio_target.pickle"
 trueEnPickle = open(trueEn,"rb")
 trueEn_ratio = np.asarray(pickle.load(trueEnPickle))
-RechitEn ="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M_fix_raw_ahcalTrim_up/recHitEn.pickle"
+RechitEn ="/home/rusack/shared/pickles/HGCAL_TestBeam/test_0to5M_fix_raw_ahcalTrim_up/recHitEn.pickle"
 RechitEnPickle = open(RechitEn,"rb")
 RechitEn_pkl =pickle.load(RechitEnPickle)
 
@@ -34,8 +34,8 @@ RechitEn_pkl =pickle.load(RechitEnPickle)
 rawE = ak.sum(RechitEn_pkl, axis=1)
 preds_trueEn = rawE*preds_ratio
 trueEn_pkl = rawE*trueEn_ratio
-valid_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M_fix_raw_ahcalTrim_up/all_valididx.pickle"
-train_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M_fix_raw_ahcalTrim_up/all_trainidx.pickle"
+valid_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/test_0to5M_fix_raw_ahcalTrim_up/all_valididx.pickle"
+train_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/test_0to5M_fix_raw_ahcalTrim_up/all_trainidx.pickle"
 valid_idx_f = open(valid_idx_file,"rb")
 valid_idx = np.asarray(pickle.load(valid_idx_f))
 print(len(valid_idx))
@@ -48,9 +48,9 @@ print(trueEn_pkl[train_idx[1]])
 print(preds_trueEn[valid_idx[1]])
 print(trueEn_pkl[valid_idx[1]])
 
-tb_valid_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_tb_fix_raw_ahcalTrim/all_valididx.pickle"
-tb_train_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_tb_fix_raw_ahcalTrim/all_trainidx.pickle"
-tb_pred_v2 ="./tb_data/pred_tb.pickle"
+tb_valid_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/tb_corrAlign/trim_Ahcal/all_valididx.pickle"
+tb_train_idx_file="/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/tb_corrAlign/trim_Ahcal/all_trainidx.pickle"
+tb_pred_v2 ="./tb_aligned/pred_tb.pickle"
 tb_predPickle = open(tb_pred_v2, "rb")
 print(tb_predPickle)
 tb_preds_ratio = np.asarray(pickle.load(tb_predPickle))
@@ -58,14 +58,14 @@ print(tb_preds_ratio[tb_preds_ratio>3])
 tb_preds_ratio[tb_preds_ratio>3] = 3
 print(tb_preds_ratio[tb_preds_ratio>3])
 
-tb_trueEn= "/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_tb_fix_raw_ahcalTrim/beamEn.pickle"
+tb_trueEn= "/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/tb_corrAlign/trim_Ahcal/beamEn.pickle"
 tb_trueEnPickle = open(tb_trueEn,"rb")
 tb_trueEn_pkl = np.asarray(pickle.load(tb_trueEnPickle))
 print(tb_trueEn_pkl[200000])
-RechitEn_tb ="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_tb_fix_raw_ahcalTrim/recHitEn.pickle"
+RechitEn_tb ="/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/tb_corrAlign/trim_Ahcal/recHitEn.pickle"
 RechitEn_tbPickle = open(RechitEn_tb,"rb")
 RechitEn_tb_pkl =pickle.load(RechitEn_tbPickle)
-tbhit_z ="/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_tb_fix_raw_ahcalTrim/Hit_Z.pickle"
+tbhit_z ="/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/tb_corrAlign/trim_Ahcal/Hit_Z.pickle"
 tbhit_zPickle = open(tbhit_z,"rb")
 z_tb =pickle.load(tbhit_zPickle)
 frac =  ((z_tb<54)*1.035) + (np.logical_and(z_tb>54, z_tb<154)*1.095) + ((z_tb>154)*1.095)
@@ -82,19 +82,19 @@ print(len(tb_train_idx))
 
 
 ## reading shower start location eventwise
-#SSLocation_file_sim = "/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M_fix_raw_ahcalTrim_up/SsLocation.pickle"
-SSLocation_file_sim = "/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M/SsLocation.pickle"
+#SSLocation_file_sim = "/home/rusack/shared/pickles/HGCAL_TestBeam/test_0to5M_fix_raw_ahcalTrim_up/SsLocation.pickle"
+SSLocation_file_sim = "/home/rusack/shared/pickles/HGCAL_TestBeam/test_0to5M/shower_start_loc.pickle"
 SSLocation_sim =  open(SSLocation_file_sim,"rb")
 SSLocation_arr_sim = np.asarray(pickle.load(SSLocation_sim))
 print(SSLocation_arr_sim[0])
-SSLocation_file_data = "/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/fix_wt/SsLocation.pickle"
+SSLocation_file_data = "/home/rusack/shared/pickles/HGCAL_TestBeam/Test_alps/tb_data/tb_corrAlign/trim_Ahcal/SsLocation.pickle"
 SSLocation_data =  open(SSLocation_file_data,"rb")
 SSLocation_arr_data = np.asarray(pickle.load(SSLocation_data))
 print(SSLocation_arr_data[0])
 
 ## Booking the histograms
 import ROOT
-fout= ROOT.TFile("hist_ratio_downScaleAHCAL_SSEvtCateg_ep86_lr1e04_5M.root", 'RECREATE')
+fout= ROOT.TFile("hist_ratio_downScaleAHCAL_SSEvtCateg_vsResol_6bins_beamEn_100epn_aligned.root", 'RECREATE')
 
 hist_pred_Valid_SSinEE=[]
 hist_true_Valid_SSinEE=[]

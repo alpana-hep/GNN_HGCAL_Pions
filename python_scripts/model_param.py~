@@ -1,0 +1,11 @@
+import torch
+import numpy as np
+import pickle
+
+a=torch.load("model_checkpoint_DynamicReductionNetwork_264709_c0e44e960c_nkv.best.pth.tar", map_location=torch.device('cpu'))
+print(a['model'])
+
+
+
+
+in python. It's a dictonary with keys->['epoch', 'model', 'optimizer', 'loss'], 'model' has the all trained parameters

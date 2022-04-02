@@ -35,7 +35,7 @@ rawE = ak.sum(RechitEn_pkl, axis=1)
 #print(rawE[0]*trueEn_pkl[0],'input')
 Pred = rawE * preds_trueEn
 
-SSLocation_file_sim = "/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M/SsLocation.pickle"
+SSLocation_file_sim = "/home/rusack/shared/pickles/HGCAL_TestBeam/pkl_files/test_0to5M/shower_start_loc.pickle"
 SSLocation_sim =  open(SSLocation_file_sim,"rb")
 SSLocation_arr_sim = np.asarray(pickle.load(SSLocation_sim))
 
